@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-let decoder = JSONDecoder()
-let encoder = JSONEncoder()
-
 // MARK: - CustomFont
 
 enum CustomFont: String, CaseIterable, Identifiable, Codable {
@@ -37,21 +34,18 @@ enum AppFont: Hashable, Codable {
     case custom(font: CustomFont)
 }
 
-#warning("Try Data")
+// MARK: - RawRepresentable
+
 extension AppFont: RawRepresentable {
     init?(rawValue: String) {
         let data = rawValue.data(using: .utf8)!
-        self = try! decoder.decode(AppFont.self, from: data)
+        self = try! JSONDecoder().decode(AppFont.self, from: data)
     }
     
     var rawValue: String {
-        let data = try! encoder.encode(self)
+        let data = try! JSONEncoder().encode(self)
         return String(decoding: data, as: UTF8.self)
     }
-    
-    typealias RawValue = String
-    
-    
 }
 
 // MARK: - ContentView
